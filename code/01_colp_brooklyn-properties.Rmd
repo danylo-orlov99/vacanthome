@@ -2,12 +2,15 @@
 title: "Vacant City-Owned Properties in Central Brooklyn"
 author: "Danylo Orlov"
 date: "`r format(Sys.Date())`"
-output: 
-  word_document:
-    toc: yes
-    toc_depth: '2'
+output:
   html_document:
     keep_md: true
+  pdf_document:
+    toc: true
+    toc_depth: '2'
+  word_document:
+    toc: true
+    toc_depth: '2'
 ---
 
 ```{r setup, include=FALSE}
