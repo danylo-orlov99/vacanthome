@@ -1,0 +1,127 @@
+---
+title: "Vacant City-Owned Properties in Central Brooklyn"
+author: "Danylo Orlov"
+date: "`r format(Sys.Date())`"
+output: 
+  word_document:
+    toc: yes
+    toc_depth: '2'
+  html_document:
+    keep_md: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+First, let's load all necessary packages:
+
+```{r}
+library(knitr)
+library(dplyr)
+library(flextable)
+```
+
+
+Let us first load the file:
+
+```{r, warning=F}
+COLP=read.csv("~/Documents/vacanthome/data/input/COLP.csv")
+```
+
+We can restirct the dataset to only include city-owned Brooklyn properties with no current use:
+
+```{r}
+data_brooklyn <- COLP %>%
+  filter(BOROUGH == 3 & OWNERSHIP == "C" & CATEGORY == 3)
+```
+
+Now, let's see how many vacant properties there are in Brooklyn:
+
+```{r}
+data_brooklyn_s <- data_brooklyn %>%
+  group_by(USE.TYPE) %>%
+  summarize(number = n())
+print(data_brooklyn_s)
+```
+
+There are 549 vacant land areas in Brooklyn, and 13 non-residential structures without any use. 
+
+Let's now zoom in on Central Brooklyn, which I am defining to include the following community districts: 302, 303, 306, 308, 309
+
+```{r}
+data_central_brooklyn <- data_brooklyn %>%
+  filter(CD %in% c(302, 303, 306, 308, 309))
+```
+
+Let's save this data that includes just those five community districts:
+
+```{r}
+save(data_central_brooklyn, file = "data_central_brooklyn.RData")
+```
+
+We can now summarize the data again:
+
+```{r}
+data_central_brooklyn_s <- data_central_brooklyn %>%
+  group_by(USE.TYPE) %>%
+  summarize(number = n())
+print(data_central_brooklyn_s)
+```
+
+There are 170 vacant land areas in Central Brooklyn, and 5 non-residential structures without any use. 
+
+Let's now list all five non-residential structures in Central Brooklyn without any use in a nice table:
+
+```{r}
+#filter and rename columns
+filtered_data_buildings <- data_central_brooklyn %>%
+  filter(USE.TYPE == "NO USE-NON RESIDENTIAL STRUCTURE") %>%
+  select(
+    `Community District` = CD, 
+    `House Number` = HOUSE.NUMBER, 
+    `Street Name` = STREET.NAME, 
+    `Address` = ADDRESS, 
+    `Parcel Name` = PARCEL.NAME, 
+    `Agency` = AGENCY
+  )
+
+#create a formatted table
+table_buildings <- flextable(filtered_data_buildings) %>%
+  set_caption("List of Non-Residential Structures in Central Brooklyn") %>%
+  autofit() 
+
+#print the formatted table
+table_buildings
+```
+
+
+And now let's do the same for all 170 vacant land areas:
+
+```{r}
+#filter and rename columns
+filtered_data_land <- data_central_brooklyn %>%
+  filter(USE.TYPE == "NO USE-VACANT LAND") %>%
+  select(
+    `Community District` = CD, 
+    `House Number` = HOUSE.NUMBER, 
+    `Street Name` = STREET.NAME, 
+    `Address` = ADDRESS, 
+    `Parcel Name` = PARCEL.NAME, 
+    `Agency` = AGENCY
+  )
+
+#create a formatted table
+table_land <- flextable(filtered_data_land) %>%
+  set_caption("List of Vacant Land Areas in Central Brooklyn") %>%
+  autofit() 
+
+#print the formatted table
+table_land
+```
+
+
+
+
+
+
