@@ -4,15 +4,19 @@ author: "Danylo Orlov"
 date: "`r format(Sys.Date())`"
 output:
   word_document:
-    toc: yes
+    toc: true
     toc_depth: '2'
   html_document:
     keep_md: true
 ---
 
+# Management
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+
+## Installing Packages 
 
 First, let's load all necessary packages:
 
@@ -22,11 +26,17 @@ library(dplyr)
 library(flextable)
 ```
 
+## Loading the File
+
 Let us first load the file:
 
 ```{r, warning=F}
 COLP=read.csv("~/Documents/vacanthome/data/input/COLP.csv")
 ```
+
+# Analysis
+
+## Brooklyn Properties
 
 We can restirct the dataset to only include city-owned Brooklyn properties with no current use:
 
@@ -45,6 +55,8 @@ print(data_brooklyn_s)
 ```
 
 There are 549 vacant land areas in Brooklyn, and 13 non-residential structures without any use. 
+
+## Central Brooklyn Properties
 
 Let's now zoom in on Central Brooklyn, which I am defining to include the following community districts: 302, 303, 306, 308, 309
 
@@ -70,6 +82,10 @@ print(data_central_brooklyn_s)
 
 There are 170 vacant land areas in Central Brooklyn, and 5 non-residential structures without any use. 
 
+# Tables
+
+## Non-residential Vacant Structures
+
 Let's now list all five non-residential structures in Central Brooklyn without any use in a nice table:
 
 ```{r}
@@ -94,6 +110,8 @@ table_buildings <- flextable(filtered_data_buildings) %>%
 #print the formatted table
 table_buildings
 ```
+
+## Vacant Land
 
 And now let's do the same for all 170 vacant land areas:
 
