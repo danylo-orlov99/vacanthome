@@ -3,6 +3,9 @@ title: "Vacant City-Owned Properties in Central Brooklyn"
 author: "Danylo Orlov"
 date: "`r format(Sys.Date())`"
 output:
+  word_document:
+    toc: yes
+    toc_depth: '2'
   html_document:
     keep_md: true
 ---
@@ -18,7 +21,6 @@ library(knitr)
 library(dplyr)
 library(flextable)
 ```
-
 
 Let us first load the file:
 
@@ -86,12 +88,12 @@ filtered_data_buildings <- data_central_brooklyn %>%
 #create a formatted table
 table_buildings <- flextable(filtered_data_buildings) %>%
   set_caption("List of Non-Residential Structures in Central Brooklyn") %>%
-  autofit() 
+  autofit() %>%
+  width(j = 1:6, width = c(1, 1, 1.5, 2, 2, 1))
 
 #print the formatted table
 table_buildings
 ```
-
 
 And now let's do the same for all 170 vacant land areas:
 
@@ -111,7 +113,8 @@ filtered_data_land <- data_central_brooklyn %>%
 #create a formatted table
 table_land <- flextable(filtered_data_land) %>%
   set_caption("List of Vacant Land Areas in Central Brooklyn") %>%
-  autofit() 
+  autofit() %>%
+  width(j = 1:6, width = c(1, 1, 1.5, 2, 2, 1))
 
 #print the formatted table
 table_land
